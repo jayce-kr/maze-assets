@@ -24,13 +24,25 @@ Wi-See는 카메라나 웨어러블 없이 Wi-Fi CSI와 소리를 이용하여 �
 
 ## 1. 프로젝트 배경
 
-| 문제 | 기존 방식의 한계 | Wi-See의 접근 | 기대효과 |
-|---|---|---|---|
-| 독거노인·1인 가구의 실내 낙상 위험 | 카메라는 사생활 침해 우려가 있음 | 영상 대신 Wi-Fi 신호 변화를 분석 | 시각적 개인정보 노출 최소화 |
-| 사용자의 지속적인 상태 확인 필요 | 웨어러블은 착용과 충전이 필요함 | 공간에 설치된 ESP32로 비접촉 감지 | 사용자의 별도 조작 없이 동작 |
-| 누움과 실제 낙상 상황의 구분 필요 | 단일 센서만으로는 오탐 가능성이 있음 | CSI 상태와 큰 소리 발생 시점을 함께 판단 | 낙상 의심 상황의 신뢰도 향상 |
+### 1.1 시장 현황 및 기존 방식의 문제점
+
+| 문제 상황 | 기존 방식의 한계 |
+|---|---|
+| 독거노인·1인 가구의 실내 낙상 위험 | 카메라는 사생활 침해 우려가 있음 |
+| 사용자의 지속적인 상태 확인 필요 | 웨어러블은 착용과 충전이 필요함 |
+| 누움과 실제 낙상 상황의 구분 필요 | 단일 센서만으로는 오탐 가능성이 있음 |
+
+### 1.2 필요성과 기대효과
+
+| Wi-See의 접근 | 기대효과 |
+|---|---|
+| 영상 대신 Wi-Fi 신호 변화를 분석 | 시각적 개인정보 노출 최소화 |
+| 공간에 설치된 ESP32로 비접촉 감지 | 사용자의 별도 조작 없이 동작 |
+| CSI 상태와 큰 소리 발생 시점을 함께 판단 | 낙상 의심 상황의 신뢰도 향상 |
 
 ## 2. 개발 목표 및 차별성
+
+### 2.1 개발 목표
 
 | 구분 | 구현 내용 |
 |---|---|
@@ -40,7 +52,7 @@ Wi-See는 카메라나 웨어러블 없이 Wi-Fi CSI와 소리를 이용하여 �
 | 실시간 서비스 | 상태·음량·알림 이력을 확인할 수 있는 웹 대시보드 구현 |
 | 긴급 대응 | 낙상 의심 상황에서 Twilio Voice API를 통한 전화 발신 |
 
-### 기존 방식과의 차이
+### 2.2 기존 서비스 대비 차별성
 
 | 비교 항목 | 카메라 기반 | 웨어러블 기반 | Wi-See |
 |---|:---:|:---:|:---:|
@@ -50,6 +62,14 @@ Wi-See는 카메라나 웨어러블 없이 Wi-Fi CSI와 소리를 이용하여 �
 | 상태 분류 | 가능 | 가능 | 가능 |
 | 설치 비용 | 중·고 | 기기별 발생 | 저가형 ESP32 활용 |
 | 낙상 판단 방식 | 영상 분석 | 가속도 센서 | CSI + 음향 복합 판단 |
+
+### 2.3 사회적 가치
+
+| 가치 | 내용 |
+|---|---|
+| 사생활 보호 | 영상이나 사용자의 신체 정보를 직접 촬영하지 않는 비시각적 감지 방식 |
+| 돌봄 공백 보완 | 독거노인과 안전 취약 사용자의 이상 상황을 비접촉 방식으로 지속 확인 |
+| 경제적 접근성 | 저가형 ESP32와 기존 Wi-Fi 환경을 활용하여 구축 비용을 낮출 가능성 제시 |
 
 ## 3. 시스템 설계
 
@@ -150,7 +170,7 @@ flowchart TD
 | 큰 소리 임계값이 설치 환경에 영향을 받음 | 환경 소음 자동 보정 및 다중 음향 특징 적용 |
 | 단일 사용자 중심의 분류 | 다중 사용자 환경과 사용자 수 추정으로 확장 |
 
-## 5. 저장소 구성
+### 4.6 저장소 구성
 
 | 경로 | 내용 |
 |---|---|
@@ -164,12 +184,12 @@ flowchart TD
 | `docs/poster` | 프로젝트 포스터 |
 | `docs/advisory` | 전문가 자문의견서 |
 
-## 6. 설치 및 실행 방법
+## 5. 설치 및 실행 방법
 
 <details>
 <summary><strong>설치 및 실행 방법 펼치기</strong></summary>
 
-### 6.1 사전 준비
+### 5.1 사전 준비
 
 | 준비 항목 | 설명 |
 |---|---|
@@ -197,7 +217,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 6.2 펌웨어 업로드
+### 5.2 펌웨어 업로드
 
 1. TX 펌웨어를 먼저 업로드하고 시리얼 모니터에 출력된 STA MAC 주소를 확인합니다.
 2. [`firmware/esp_rx/src/main.cpp`](firmware/esp_rx/src/main.cpp)의 `TARGET_MAC`을 해당 주소로 수정합니다.
@@ -209,7 +229,7 @@ pio device monitor -d firmware/esp_tx
 pio run -d firmware/esp_rx -t upload
 ```
 
-### 6.3 대시보드 실행
+### 5.3 대시보드 실행
 
 전화 기능 없이 확인하려면 `CALL_ENABLED`를 설정하지 않거나 `false`로 둡니다.
 
@@ -219,7 +239,7 @@ python software/fall_detection/monitor.py
 
 브라우저에서 `http://127.0.0.1:5000`을 엽니다. Twilio 전화를 사용할 때는 `.env.example`을 참고해 터미널 환경변수를 설정합니다. `.env` 파일은 자동으로 읽지 않으며 저장소에 커밋하면 안 됩니다.
 
-### 6.4 실시간 추론
+### 5.4 실시간 추론
 
 대시보드를 먼저 실행한 후 RX의 직렬 포트를 지정합니다. 보정 시간 동안 공간을 비워 두어야 합니다.
 
@@ -233,7 +253,7 @@ python software/ml_dl/src/realtime_four_state_best_original.py \
 
 macOS/Linux에서는 `COM5` 대신 `/dev/ttyUSB0` 또는 실제 장치 경로를 사용합니다.
 
-### 6.5 모델 재학습
+### 5.5 모델 재학습
 
 [`software/ml_dl/data/README.md`](software/ml_dl/data/README.md)의 구조로 원본 데이터를 배치한 뒤 실행합니다.
 
@@ -245,30 +265,71 @@ python software/ml_dl/src/train_four_state_best_original.py \
 
 </details>
 
-## 7. 소개 자료
+## 6. 소개 자료 및 시연 영상
+
+### 6.1 프로젝트 소개 자료
 
 | 자료 | 링크 |
 |---|---|
-| 시연 영상 | [YouTube 바로가기](https://youtu.be/cEhZeaYs7K8) |
 | 최종보고서 | [PDF 보기](docs/reports/최종보고서.pdf) |
 | 중간보고서 | [PDF 보기](docs/reports/중간보고서.pdf) |
 | 착수보고서 | [PDF 보기](docs/reports/착수보고서.pdf) |
 | 프로젝트 포스터 | [PDF 보기](docs/poster/Wi-See_포스터.pdf) |
 | 전문가 자문의견서 | [PDF 보기](docs/advisory/웹젠_정택식_자문의견서.pdf) |
 
-## 8. 팀 구성
+### 6.2 시연 영상
 
-| 이름 | 학번 | 담당 업무 |
-|---|---|---|
-| 박진석 | 202255660 | ESP32 CSI 송·수신 펌웨어, 설치 실험, 계층형 모델 및 실시간 추론 |
-| 김민준 | 202155527 | CSI 신호 처리·시각화, 성능 비교, 대시보드 및 긴급 전화 연동 |
-| 홍정기 | 202055624 | 펌웨어 최적화, 데이터 수집 자동화, 1D CNN/XGBoost 학습 및 튜닝 |
+- [YouTube에서 Wi-See 시연 영상 보기](https://youtu.be/cEhZeaYs7K8)
+
+## 7. 팀 구성
+
+### 7.1 팀원 소개 및 역할 분담
+
+| 이름 | 학번 | 이메일 | 담당 업무 |
+|---|---|---|---|
+| 박진석 | 202255660 | wlstjr298@pusan.ac.kr | ESP32 CSI 송·수신 펌웨어, 설치 실험, 계층형 모델 및 실시간 추론 |
+| 김민준 | 202155527 | 21kimminjun@pusan.ac.kr | CSI 신호 처리·시각화, 성능 비교, 대시보드 및 긴급 전화 연동 |
+| 홍정기 | 202055624 | bluefrog010516@pusan.ac.kr | 펌웨어 최적화, 데이터 수집 자동화, 1D CNN/XGBoost 학습 및 튜닝 |
 
 | 구분 | 내용 |
 |---|---|
 | 팀 | 28조 Wi-See |
 | 지도교수 | 김태운 교수 |
 
-## 9. 참고 문헌 및 출처
+### 7.2 개발 기여 및 문제 해결
 
-세부 참고 문헌은 [최종보고서](docs/reports/최종보고서.pdf)의 참고문헌 항목을 확인하십시오. 주요 구현은 Espressif ESP32 Wi-Fi CSI/ESP-NOW API, TensorFlow/Keras, XGBoost, Flask 및 Twilio 공식 문서를 참고했습니다.
+| 이름 | 주요 기여 및 문제 해결 내용 |
+|---|---|
+| 박진석 | 실내 다중경로와 LoS 조건을 비교하여 송·수신기 배치를 조정하고, 재실 판단과 활동 분류를 결합한 계층형 실시간 추론 구조를 구현 |
+| 김민준 | 환경 잡음의 영향을 줄이기 위한 CSI 신호 처리와 성능 비교 체계를 구성하고, 추론 결과를 대시보드와 긴급 전화 기능에 연결 |
+| 홍정기 | 반복적인 데이터 수집 과정을 자동화하고, 1D CNN과 XGBoost의 파라미터를 조정하여 모델 성능과 재현성을 개선 |
+
+## 8. 참고 문헌 및 출처
+
+1. 모형근, 김승구, “WiFi CSI를 활용한 머신러닝 기반 신원 확인 시스템,” 『2020년도 한국통신학회 하계종합학술발표회 논문집』, 2020, pp. 133-134.
+
+2. H. Lee, C. R. Ahn, and N. Choi, “Exploiting Multiple Receivers for CSI-Based Activity Classification Using a Hybrid CNN-LSTM Model,” in *Proceedings of the 1st ACM International Workshop on Device-Free Human Sensing (DFHS '19)*, New York, NY, USA, Nov. 2019, pp. 18-21, doi: [10.1145/3360773.3360878](https://doi.org/10.1145/3360773.3360878).
+
+3. A. Dempster, D. F. Schmidt, and G. I. Webb, “MiniRocket: A Very Fast (Almost) Deterministic Transform for Time Series Classification,” in *Proceedings of the 27th ACM SIGKDD Conference on Knowledge Discovery & Data Mining (KDD '21)*, Aug. 2021, pp. 248-257, doi: [10.1145/3447548.3467231](https://doi.org/10.1145/3447548.3467231).
+
+4. F. Deng, E. Jovanov, H. Song, W. Shi, Y. Zhang, and W. Xu, “WiLDAR: WiFi Signal-Based Lightweight Deep Learning Model for Human Activity Recognition,” *IEEE Internet of Things Journal*, vol. 11, no. 2, pp. 2899-2908, Jan. 2024, doi: [10.1109/JIOT.2023.3294004](https://doi.org/10.1109/JIOT.2023.3294004).
+
+5. H. Salehinejad and S. Valaee, “LiteHAR: Lightweight Human Activity Recognition from WiFi Signals with Random Convolution Kernels,” in *Proceedings of the 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)*, Singapore, May 2022, pp. 4068-4072, doi: [10.1109/ICASSP43922.2022.9746803](https://doi.org/10.1109/ICASSP43922.2022.9746803).
+
+6. P. Sruthi and S. K. Udgata, “Wi-Fi Sensing Based Person Identification and Activity Recognition Using Two-Phase Deep Learning Model,” *Engineering Applications of Artificial Intelligence*, vol. 132, Art. no. 107904, Jun. 2024, doi: [10.1016/j.engappai.2024.107904](https://doi.org/10.1016/j.engappai.2024.107904).
+
+7. M. Matey-Sanz, J. Torres-Sospedra, and A. Moreira, “Temporal Stability on Human Activity Recognition Based on Wi-Fi CSI,” in *Proceedings of the 2023 International Conference on Indoor Positioning and Indoor Navigation (IPIN)*, Nuremberg, Germany, Sep. 2023, pp. 1-6, doi: [10.1109/IPIN57070.2023.10332214](https://doi.org/10.1109/IPIN57070.2023.10332214).
+
+8. J. Guo, W. Zhuang, Y. Mao, and I. W.-H. Ho, “RSSI-Assisted CSI-Based Passenger Counting with Multiple Wi-Fi Receivers,” in *Proceedings of the 2025 IEEE Wireless Communications and Networking Conference (WCNC)*, Milan, Italy, Mar. 2025, pp. 1-6, doi: [10.1109/WCNC61545.2025.10978465](https://doi.org/10.1109/WCNC61545.2025.10978465).
+
+9. A. Dempster, F. Petitjean, and G. I. Webb, “ROCKET: Exceptionally Fast and Accurate Time Series Classification Using Random Convolutional Kernels,” *Data Mining and Knowledge Discovery*, vol. 34, no. 5, pp. 1454-1495, Sep. 2020, doi: [10.1007/s10618-020-00701-z](https://doi.org/10.1007/s10618-020-00701-z).
+
+10. A. Y. Radwan, M. Yildirim, N. Hasanzadeh, H. Tabassum, and S. Valaee, “A Tutorial-cum-Survey on Self-Supervised Learning for Wi-Fi Sensing: Trends, Challenges, and Outlook,” *arXiv preprint* arXiv:2506.12052, May 2025, doi: [10.48550/arXiv.2506.12052](https://doi.org/10.48550/arXiv.2506.12052).
+
+11. D. Halperin, W. Hu, A. Sheth, and D. Wetherall, “Tool Release: Gathering 802.11n Traces with Channel State Information,” *ACM SIGCOMM Computer Communication Review*, vol. 41, no. 1, p. 53, Jan. 2011, doi: [10.1145/1925861.1925870](https://doi.org/10.1145/1925861.1925870).
+
+12. C. Han, K. Wu, Y. Wang, and L. M. Ni, “WiFall: Device-Free Fall Detection by Wireless Networks,” in *Proceedings of IEEE INFOCOM 2014 - IEEE Conference on Computer Communications*, Toronto, ON, Canada, Apr./May 2014, pp. 271-279, doi: [10.1109/INFOCOM.2014.6847948](https://doi.org/10.1109/INFOCOM.2014.6847948).
+
+13. H. Wang, D. Zhang, Y. Wang, J. Ma, Y. Wang, and S. Li, “RT-Fall: A Real-Time and Contactless Fall Detection System with Commodity WiFi Devices,” *IEEE Transactions on Mobile Computing*, vol. 16, no. 2, pp. 511-526, Feb. 2017, doi: [10.1109/TMC.2016.2557795](https://doi.org/10.1109/TMC.2016.2557795).
+
+14. J. Kim, K. Min, M. Jung, and S. Chi, “Occupant Behavior Monitoring and Emergency Event Detection in Single-Person Households Using Deep Learning-Based Sound Recognition,” *Building and Environment*, vol. 181, Art. no. 107092, Aug. 2020, doi: [10.1016/j.buildenv.2020.107092](https://doi.org/10.1016/j.buildenv.2020.107092).
